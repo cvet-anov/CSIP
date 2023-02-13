@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    body{
+        display:inline-block;
+        width: 1000px;
+    }
+    #removed{
+        float: right;
+    }
+    #have{
+        width: 25px;
+    }
+    table,th,tr,thead,td{
+        border: 1px solid black;
+        border-collapse: collapse;
+        align-content: center;
+        align-items: center;
+        padding: 10px;
+        width: 25%;
+    }
+    button{
+        margin: 5px;
+    }
+    label{
+
+        display:inline-block;
+    }
+    div{
+        margin:15px;
+    }
+</style>
+<script>
+    let counter=0;
+    function vnesidata(){
+        let free=document.getElementById("free").checked
+        let title=document.getElementById("Title")
+        let textarea=document.getElementById("textarea")
+        let category=document.getElementById("category")
+        let link="finki.ukim.mk/"+title.value.toLowerCase().split(" ").join("-")
+        let type
+
+        if (free) type="Free"
+        else type="Paid"
+
+        let tabela=document.getElementById("tabela")
+        let row=document.createElement("tr")
+
+        row.innerHTML=
+            "<td>"+title.value+"</td>"+
+            "<td>"+textarea.value+"</td>"+
+            "<td>"+link+"</td>"+
+            "<td>"+type+"</td>"+
+            "<td>"+category.value+"</td>"+
+            "<td><button onclick='publish(this)'>Publish</button><br><button onclick='remove(this)'>Remove</button></td>"
+        tabela.append(row)
+    }
+
+    function publish(button){
+        button.parentNode.parentNode.style.backgroundColor="lightblue"
+        button.parentNode.parentNode.style.opacity=0.5
+        button.disabled=true
+        button.nextElementSibling.nextElementSibling.disabled=true;
+        counter++;
+        let suma=document.getElementById("suma")
+        suma.innerHTML=counter;
+    }
+
+    function remove(button){
+        let row=button.parentNode.parentNode
+        row.style.opacity=1
+
+        var MyInterval=setInterval(function(){
+            row.style.opacity-=0.1
+        },200)
+
+        setTimeout(function ()
+        {
+            clearInterval(MyInterval)
+            let removed=document.getElementById("removed")
+            let li=document.createElement("li")
+            li.innerHTML=row.children[2].innerHTML
+            removed.append(li)
+            row.remove()
+        },2000)
+
+    }
+</script>
+<body>
+<div id="removed">
+    <h2>Removed links:</h2>
+</div>
+<div>
+    <div>
+    <h1>Post details</h1>
+    </div>
+    <div>
+        <label for="textarea">Title</label>
+        <input type="text" id="Title">
+    </div>
+    <div>
+        <label></label>
+        <textarea id="textarea"></textarea>
+    </div>
+    <div>
+        <label>Content Type</label>
+        <input type="radio" name="content" id="free">Free
+        <input type="radio" name="content" id="paid">Paid
+    </div>
+    <div>
+        <label>Category</label>
+        <select id="category">
+            <option>Science</option>
+            <option>Drama</option>
+            <option>History</option>
+        </select>
+    </div>
+    <div>
+    <button onclick="vnesidata()">Import post</button>
+    </div>
+    <div>
+        <h2>Published posts: <span id="suma">0</span></h2>
+        <table id="tabela">
+            <thead>
+            <th>Title</th>
+            <th>Post</th>
+            <th>Link</th>
+            <th>Type</th>
+            <th>Category</th>
+            <th>Actions</th>
+            </thead>
+        </table>
+
+    </div>
+</div>
+
+</body>
+</html>

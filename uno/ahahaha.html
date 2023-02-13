@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title> 22
+  <script>
+    function update_total_price() {
+      var kelii_cena = document.getElementsByClassName("project_price")
+      var suma = 0
+      for(var i=0; i<kelii_cena.length; i++){
+        suma += parseInt(kelii_cena[i].innerHTML)
+      }
+      var pole_suma = document.getElementById("vkupna_suma")
+      pole_suma.innerHTML = suma
+    }
+    function remove(button) {
+      var redica = button.parentNode.parentNode
+      redica.parentNode.removeChild(redica)
+      update_total_price()
+    }
+    function sumbit_data() {
+      var avtor = document.getElementById("avtor")
+      var proekt = document.getElementById("proekt")
+      var cena = document.getElementById("cena")
+      if(avtor.value=="" || proekt.value=="" || cena.value==""){
+        alert("Popolnete gi site polinja")
+        return;
+      }
+      var tabela = document.getElementById("tabela")
+      tabela.innerHTML += "<tr><td>"+avtor.value+
+              "</td><td>"+proekt.value+
+              "</td><td class='project_price'>"+cena.value+"</td><td><button onclick='remove(this)'>Remove</button></td></tr>"
+      update_total_price()
+    }
+  </script>
+  <style>
+    div{
+      margin-bottom: 15px;
+    }
+    table, tr, th, td{
+      border: 1px solid black;
+    }
+    table{
+      border-collapse: collapse;
+    }
+  </style>
+</head>
+<body>
+<h2>Forma za prijavuvanje</h2>
+<div>
+  <span>Avtor: </span><input type="text" id="avtor">
+</div>
+<div>
+  <span>Proekt: </span><input type="text" id="proekt">
+</div>
+<div>
+  <span>Cena: </span><input type="text" id="cena">
+</div>
+<button onclick="sumbit_data()">Prati</button>
+<p>Vkupnata suma na proektite e: <span id="vkupna_suma">0</span></p>
+<table id="tabela">
+  <tr><th>Author</th><th>Project</th><th colspan="2">Cost</th></tr>
+</table>
+</body>

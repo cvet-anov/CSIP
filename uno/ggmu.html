@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    div{
+        margin:10px;
+    }
+    #tabela,td,th,tr{
+        border: 2px solid black;
+        border-collapse: collapse;
+    }
+    #tabeladi{
+        display: inline-block;
+    }
+    #otkazani{
+        display: inline-block;
+        float: right;
+        margin-right: 500px;
+    }
+</style>
+<script>
+    var data='[{"address_from":"Partizanska 1", "address_to":"Kliment Ohridski 15", "weight":"3.5", "paid_type":"on_send", "ID":"Id902 90sUsdql3", "delivery": "on_hold"},{"address_from":"Ruzveltova 3", "address_to":"3MUB 43", "weight":"15", "paid_type":"on_receive", "ID":"W8902 90sWmPqLzl3", "delivery": "false"}]'
+   var newData=JSON.parse(data)
+    var suma=0;
+    window.onload=function(){
+        for (let i=0;i<newData.length;i++)
+        {
+            var isprakac=newData[i].address_from
+            var primac=newData[i].address_to
+            var tezhina=newData[i].weight
+            var nachin=newData[i].paid_type
+            var id=newData[i].ID
+            var novoid=id.toLowerCase().split(" ").join("-")
+            var cena
+            if (tezhina.value>5)
+            {
+                cena=1200
+            }else cena=500
+
+            var tabela=document.getElementById("tabela")
+            var row=document.createElement("tr")
+            row.innerHTML=  "<td>"+novoid+"</td>"+
+                "<td>"+isprakac+"</td>"+
+                "<td>"+primac+"</td>"+
+                "<td>"+cena+"</td>"+
+                "<td><button onclick='dostavi(this)'>Dostaveno</button><br><button onclick='removerow(this)'>Otkazano</button></td>"
+            tabela.append(row)
+        }
+
+    }
+    function submitdata(){
+        var isprakac=document.getElementById("isprakac")
+        var primac=document.getElementById("primac")
+        var tezhina=document.getElementById("tezhina")
+        var sent=document.getElementById("prakjanje")
+        var recieve=document.getElementById("primanje")
+        var id=document.getElementById("idovac")
+        var cena;
+
+        if (isprakac.value =="" || primac.value=="" || tezhina.value=="" || (sent.checked==false && recieve.checked==false) || id.value==""){
+            alert("go to hell")
+            return;
+        }
+        if (tezhina.value>5)
+        {
+            cena=1200
+        }else cena=500
+        var tabela=document.getElementById("tabela")
+        var row=document.createElement("tr")
+        row.innerHTML=  "<td>"+id.value+"</td>"+
+                        "<td>"+isprakac.value+"</td>"+
+                        "<td>"+primac.value+"</td>"+
+                        "<td>"+cena+"</td>"+
+                        "<td><button onclick='dostavi(this)'>Dostaveno</button><br><button onclick='removerow(this)'>Otkazano</button></td>"
+        tabela.append(row)
+    }
+
+    function dostavi(btn){
+        var row=btn.parentNode.parentNode
+        row.style.backgroundColor="lightgreen"
+        btn.disabled=true
+        btn.nextElementSibling.nextElementSibling.disabled=true
+
+        var vkupno=document.getElementById("vkupno")
+        var sumata=row.children[3].innerHTML
+        var final=parseInt(sumata)
+        suma+=final
+        vkupno.innerHTML=suma
+    }
+    function removerow(btn){
+        var row=btn.parentNode.parentNode
+        row.style.opacity=1
+        var myInterval=setInterval(function(){
+            row.style.opacity-=0.1
+        },100)
+
+        setTimeout(function()
+        {
+            clearInterval(myInterval)
+            var item=document.getElementById("otkazani")
+            var li=document.createElement("li")
+            li.innerHTML=row.children[0].innerHTML
+            item.append(li)
+            row.remove()
+        },1000)
+    }
+</script>
+<body>
+<h1>Kargo isprakjac</h1>
+<div>
+    <label>Adresa na plakjanje</label><input type="text" id="isprakac">
+</div>
+<div>
+    <label>Adresa na isprakanje</label><input type="text" id="primac">
+</div>
+<div>
+    <label>Tezhina na plakjanje</label><input type="text" id="tezhina">
+</div>
+<div>
+    <label>Nachin na plakjanje</label>
+<input type="radio" name="nachin" id="prakjanje">Prakjanje
+    <input type="radio" name="nachin" id="primanje">Primanje
+</div>
+<div>
+    <label>ID</label><input type="text" id="idovac">
+</div>
+<div>
+<button onclick="submitdata()">Vnesi</button>
+</div>
+<div>
+    <h1>Vneseni pratki</h1>
+    <h2>Vkupna suma:<span id="vkupno">0</span></h2>
+</div>
+
+
+<div id="tabeladiv">
+    <div>
+    <table id="tabela">
+        <thead>
+            <td>ID</td>
+            <td>Adresa na isprakjac</td>
+            <td>Adresa na primac</td>
+            <td>Cena</td>
+            <td>Akcii</td>
+        </thead>
+
+    </table>
+    </div>
+    <div id="otkazani">
+    <h2 >Otkazani pratki</h2>
+    </div>
+</div>
+</body>
+</html>

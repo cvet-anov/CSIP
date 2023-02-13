@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    body{
+        margin: 20px;
+        display: inline-grid;
+    }
+    .added
+    {
+        display: inline-block;
+        padding: 28px;
+        margin: 10px;
+        border: 1px solid black;
+        height: 200px;
+    }
+    label{
+        width:200px;
+        margin:5px;
+        display:inline-block;
+    }
+
+
+</style>
+<script>
+
+    function vnesikarticka(){
+        let ime=document.getElementById("ime")
+        let prezime=document.getElementById("prezime")
+        let id=document.getElementById("id")
+        let promet=document.getElementById("Promet")
+        /*-------------------------*/
+
+        if (ime.value===""||prezime.value===""||id.value===""||promet.value==="")
+        {
+            alert("hi")
+            return 0;
+        }
+
+        /*-------------------------*/
+
+        if (!checkID(id.value))
+        {
+            alert("fake")
+            return 0;
+        }
+        /*-------------------------*/
+
+        let elementi = document.getElementsByClassName("added");
+        for(let i=0; i<elementi.length; i++)
+        {
+            if(elementi[i].children[3].children[0].innerHTML===id.value)
+            {
+                let novaSuma = parseInt(promet.value);
+                let postoecka = parseInt(elementi[i].children[4].children[0].innerHTML);
+                elementi[i].children[4].children[0].innerHTML = novaSuma + postoecka
+                return;
+            }
+        }
+
+        /*-------------------------*/
+
+
+
+        let smetka=Math.floor(Math.random()*1000)
+        let vnesi=document.getElementById("vnesi")
+        let div=document.createElement("div")
+
+        div.innerHTML="<p>Smetka:"+smetka+"</p>"+
+                      "<p>Ime:"+ime.value+"</p>"+
+                      "<p>Prezime:"+prezime.value+"</p>"+
+                      "<p>ID:<span>"+id.value+"</span></p>"+
+                      "<p>Promet:<span>"+promet.value+"</span></p>"+
+                      "<button onclick='izbrisi(this)' >Plati</button>"
+        div.setAttribute("class","added")
+
+
+        if (promet.value>5000)
+        {div.style.backgroundColor="red"} else {div.style.backgroundColor="lightgreen"}
+
+
+        vnesi.append(div)
+    }
+    /*-------------------------*/
+    function izbrisi(btn){
+        let row=btn.parentNode
+        row.style.opacity=1
+        let MyInterval=setInterval(function(){
+            row.style.opacity-=0.1
+        },200)
+
+        setTimeout(function(){
+            clearInterval(MyInterval)
+            let list=document.getElementById("plateni")
+            let element=row
+            element.style.opacity=1
+            list.append(element)
+            btn.style.opacity=0
+        },2000)
+        btn.disabled=true
+    }
+    /*-------------------------*/
+    function checkID(ID){
+        let golemabukva=0
+        let bukvi=0
+
+        for (let i=0;i<ID.length;i++){
+            if (ID[i].toUpperCase()===ID[i]&&isNaN(ID[i]))
+            {golemabukva++}
+        }
+
+        for (let j=0;j<ID.length;j++) {
+            if (isNaN(ID[j]))
+                bukvi++
+        }
+        return (ID.length === 10 && golemabukva >= 3 && bukvi === 9);
+    }
+
+</script>
+<body>
+<div>
+<h1>Sistem za smetki</h1>
+<div>
+    <label for="ime">Ime:</label>
+    <input type="text" id="ime">
+</div>
+<div>
+    <label for="prezime">Prezime:</label>
+    <input type="text" id="prezime">
+</div>
+<div>
+    <label for="id">ID;</label>
+    <input type="text" id="id">
+</div>
+<div>
+    <label for="Promet">Promet;</label>
+    <input type="text" id="Promet">
+</div>
+<div>
+    <button onclick="vnesikarticka()">Zachuvaj</button>
+</div>
+    <h2>Vneseni smetki</h2>
+<div id="vnesvanje">
+    <ul id="vnesi">
+
+    </ul>
+</div>
+    <h2>Plateni smetki</h2>
+    <div id="plateni">
+    </div>
+</div>
+</body>

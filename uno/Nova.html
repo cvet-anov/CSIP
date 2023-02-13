@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script>
+  var data = '[{"name": "filip", "prezime": "cvetanov","adresa": "cvetanov.filip@gmail.com","godini": 20,"pol": "male","grad": "zasle"},{"name": "tamara","prezime": "cvetanov","adresa": "cvetanova.tami69@gmail.com","godini": 12,"pol": "female","grad": "kumanovsko"}]'
+  var newData=JSON.parse(data)
+ window.onload=function(){
+    for (let i=0;i<newData.length;i++){
+      var ime=newData[i].name
+     var prezime=newData[i].prezime
+     var adresa=newData[i].adresa
+     var mesto=newData[i].grad
+     var godini=newData[i].godini
+     var pol=newData[i].pol
+
+  var realgodini=parseInt(godini)
+      if (realgodini<18){
+        let tabelaMal = document.getElementById("tabela")
+        let row=document.createElement("tr")
+        row.innerHTML+="<tr><td>"+ime+
+                "</td><td>"+prezime+
+                "</td><td>"+adresa+
+                "</td><td>"+mesto+
+                "</td><td><button onclick='vakciniran(this)'>Vakciniran</button></td></tr>"
+        tabelaMal.append(row)
+        if (pol=="male")
+        {
+          row.style.backgroundColor="lightblue"
+        }
+        else row.style.backgroundColor ="pink"
+      }
+      else{
+        let tabelaGol = document.getElementById("tabela2")
+        let row=document.createElement("tr")
+        row.innerHTML+="<tr><td>"+ime+
+                "</td><td>"+prezime+
+                "</td><td>"+adresa+
+                "</td><td>"+mesto+
+                "</td><td><button onclick='vakciniran(this)'>Vakciniran</button></td></tr>"
+        tabelaGol.append(row)
+        if (pol=="male")
+        {
+          row.style.backgroundColor="lightblue"
+        } else row.style.backgroundColor="pink"
+
+      }
+   }
+ }
+
+  function submit_data() {
+
+    let ime=document.getElementById("ime")
+    let prezime=document.getElementById("prezime")
+    let adresa=document.getElementById("Adresa")
+    let mesto=document.getElementById("grad")
+    let godini=document.getElementById("godini")
+    let male=document.getElementById("Male").checked
+
+
+
+    if (ime.value=="" ||prezime.value=="" ||adresa.value=="" || mesto.value==""){
+      alert("Insert all")
+      return
+    }
+  if (godini.value<18){
+    let tabelaMal = document.getElementById("tabela")
+    let row=document.createElement("tr")
+    row.innerHTML+="<tr><td>"+ime.value+
+    "</td><td>"+prezime.value+
+    "</td><td>"+adresa.value+
+    "</td><td>"+mesto.value+
+    "</td><td><button onclick='vakciniran(this)'>Vakciniran</button></td></tr>"
+    tabelaMal.append(row)
+    if (male)
+    {
+      row.style.backgroundColor="lightblue"
+    }
+    else row.style.backgroundColor ="pink"
+  }
+  else{
+    let tabelaGol = document.getElementById("tabela2")
+    let row=document.createElement("tr")
+    row.innerHTML+="<tr><td>"+ime.value+
+            "</td><td>"+prezime.value+
+            "</td><td>"+adresa.value+
+            "</td><td>"+mesto.value+
+            "</td><td><button onclick='vakciniran(this)'>Vakciniran</button></td></tr>"
+    tabelaGol.append(row)
+    if (male)
+    {
+     row.style.backgroundColor="lightblue"
+    } else row.style.backgroundColor="pink"
+
+  }
+
+  }
+
+  function vakciniran(button){
+    let row=button.parentNode.parentNode
+    row.style.opacity=1
+
+
+    var myInterval = setInterval(function (){
+      row.style.opacity -= 0.1
+    },100);
+
+
+    setTimeout(function(){
+
+      clearInterval(myInterval)
+      let lista=document.getElementById("Vakcinirani")
+      var li=document.createElement("li")
+      li.innerHTML=row.children[0].innerHTML+" "+row.children[1].innerHTML
+      lista.append(li)
+      row.parentNode.removeChild(row)
+    },1000)
+  }
+</script>
+<style>
+  h1,h2{align-content: center; text-align: center; }
+  body{display: inline-grid; align-items: center;}
+  #tabeladiv{display:inline-block; align-content: center;}
+  #lev,#levatabela {display:inline-grid; float:left;}
+  #desen,#desnatabela {display:inline-grid; float:right;}
+
+  #Submit{
+    margin: 50px;
+  }
+  table,tr,th,td{
+    border: 1px solid black;
+  }
+</style>
+<body>
+<h1>Vakcina mk</h1>
+<h2>Сајт за искажување интерес за вакцина</h2>
+<div id="teksts">
+  <div id="lev">
+    <span>Име:</span><input type="text" id="ime">
+    <span>Matichen Broj:</span><input type="text" id="Maticen">
+    <span>Godini:</span><input type="text" id="godini">
+    <span>Lokacija:</span>
+    <select id="grad">Skopje
+    <option>Skopje</option>
+    <option>Bitola</option>
+    <option>Prilep</option>
+    </select>
+
+  </div>
+
+<div id="desen">
+<span>Prezime:</span><input type="text" id="prezime">
+  <div>
+    <input type="radio" name="gender" value="Male" id="Male">Male
+    <input type="radio" name="gender" value="Female" id="Female">Female
+  </div>
+<span>Adresa:</span><input type="text" id="Adresa">
+
+  <button onclick="submit_data()">Submit</button>
+</div>
+</div>
+
+<div id="tabeladiv">
+  <div id="levatabela">
+    <h2>Interes</h2>
+    <table id="tabela">
+      <tr><th>Ime</th><th>Prezime</th><th>Lokacija</th><th>Adresa</th><th>Status</th></tr>
+    </table>
+  </div>
+  <div id="desnatabela">
+    <h2>Prijaveni</h2>
+    <table id="tabela2">
+      <tr><th>Ime</th><th>Prezime</th><th>Lokacija</th><th>Adresa</th><th>Status</th></tr>
+    </table>
+    <div id="Vakcinirani">Vakcinirani:</div>
+  </div>
+</div>
+</body>
+</html>
